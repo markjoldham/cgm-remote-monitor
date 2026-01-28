@@ -386,7 +386,7 @@ Add new section to Day to Day report after fasting periods summary:
 
 ### 10.1 Example Calculations
 
-**Example 1: Rising Glucose Overnight**
+#### Example 1: Rising Glucose Overnight
 
 ```text
 Input:
@@ -404,7 +404,7 @@ Calculation:
 - Confidence: HIGH (duration 8h, CV 10%, R² 0.98)
 ```
 
-**Example 2: Falling Glucose Morning**
+#### Example 2: Falling Glucose Morning
 
 ```text
 Input:
