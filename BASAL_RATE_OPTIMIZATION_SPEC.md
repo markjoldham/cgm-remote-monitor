@@ -46,10 +46,10 @@ Provide intelligent, safety-focused recommendations for basal rate adjustments b
 - **FR-2.1**: Suggest specific rate adjustments (e.g., "+0.05 U/hr", "-0.10 U/hr")
 - **FR-2.2**: Provide time-of-day specific recommendations
 - **FR-2.3**: Calculate recommended adjustment magnitude based on:
-  - Rate of change during fasting
-  - Current basal rate (if available from profile)
-  - Glucose variability (CV%)
-  - Duration of fasting period
+    - Rate of change during fasting
+    - Current basal rate (if available from profile)
+    - Glucose variability (CV%)
+    - Duration of fasting period
 - **FR-2.4**: Prioritize recommendations by impact and confidence
 
 #### FR-3: Safety Features
@@ -96,7 +96,7 @@ Provide intelligent, safety-focused recommendations for basal rate adjustments b
 
 #### 3.1.1 Trend Analysis
 
-```
+```text
 For each fasting period:
 1. Calculate linear regression of glucose over time
 2. Compute slope (mg/dL per hour)
@@ -105,11 +105,11 @@ For each fasting period:
    - Rising: slope > +5 mg/dL/hr AND R² > 0.5
    - Falling: slope < -5 mg/dL/hr AND R² > 0.5
    - Stable: |slope| ≤ 5 mg/dL/hr OR R² ≤ 0.5
-```
+```text
 
 #### 3.1.2 Basal Rate Adjustment Calculation
 
-```
+```text
 Base adjustment formula:
 adjustment_U_per_hr = (slope_mg_dL_per_hr / sensitivity_factor) * safety_multiplier
 
@@ -123,11 +123,11 @@ Example:
 - Sensitivity: 50 mg/dL per U
 - Safety multiplier: 0.4
 - Adjustment: (10 / 50) * 0.4 = +0.08 U/hr
-```
+```text
 
 #### 3.1.3 Confidence Scoring
 
-```
+```text
 Confidence score (0-100):
 - Duration score: min(duration_hours / 6, 1.0) * 30
 - Stability score: (1 - CV/40) * 30
@@ -138,7 +138,7 @@ Total confidence = sum of above scores
 - High confidence: 70-100
 - Medium confidence: 50-69
 - Low confidence: 0-49
-```
+```text
 
 ### 3.2 Safety Rules
 
@@ -173,7 +173,7 @@ For high-confidence recommendations:
 
 Add new section to Day to Day report after fasting periods summary:
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │ Basal Rate Optimization Recommendations                     │
 ├─────────────────────────────────────────────────────────────┤
@@ -222,7 +222,7 @@ Add new section to Day to Day report after fasting periods summary:
 │ • Keep detailed notes of changes made                       │
 │                                                              │
 └─────────────────────────────────────────────────────────────┘
-```
+```text
 
 #### 3.3.2 Color Coding
 
@@ -398,7 +398,7 @@ Add new section to Day to Day report after fasting periods summary:
 
 **Example 1: Rising Glucose Overnight**
 
-```
+```text
 Input:
 - Fasting period: 10 PM - 6 AM (8 hours)
 - Glucose readings: 120, 125, 130, 135, 140, 145, 150, 155 mg/dL
@@ -416,7 +416,7 @@ Calculation:
 
 **Example 2: Falling Glucose Morning**
 
-```
+```text
 Input:
 - Fasting period: 6 AM - 10 AM (4 hours)
 - Glucose readings: 140, 130, 120, 110, 100, 90 mg/dL
