@@ -233,9 +233,9 @@ Add new section to Day to Day report after fasting periods summary:
 
 ### 4.1 Phase 1: Statistical Analysis Engine
 
-**Files**: `lib/report_plugins/basal-rate-optimizer.js`
+**Files:** `lib/report_plugins/basal-rate-optimizer.js`
 
-**Tasks**:
+**Tasks:**
 
 - [ ] Implement linear regression for glucose trends
 - [ ] Calculate R² and confidence intervals
@@ -245,9 +245,9 @@ Add new section to Day to Day report after fasting periods summary:
 
 ### 4.2 Phase 2: Recommendation Engine
 
-**Files**: `lib/report_plugins/basal-rate-optimizer.js`
+**Files:** `lib/report_plugins/basal-rate-optimizer.js`
 
-**Tasks**:
+**Tasks:**
 
 - [ ] Implement basal rate adjustment calculation
 - [ ] Apply safety rules and limits
@@ -257,9 +257,9 @@ Add new section to Day to Day report after fasting periods summary:
 
 ### 4.3 Phase 3: Safety Validation
 
-**Files**: `lib/report_plugins/basal-rate-optimizer.js`
+**Files:** `lib/report_plugins/basal-rate-optimizer.js`
 
-**Tasks**:
+**Tasks:**
 
 - [ ] Implement disqualification criteria
 - [ ] Add hypoglycemia detection
@@ -269,9 +269,9 @@ Add new section to Day to Day report after fasting periods summary:
 
 ### 4.4 Phase 4: UI Integration
 
-**Files**: `lib/report_plugins/daytoday.js`
+**Files:** `lib/report_plugins/daytoday.js`
 
-**Tasks**:
+**Tasks:**
 
 - [ ] Add recommendations section to report
 - [ ] Implement color coding
@@ -281,7 +281,7 @@ Add new section to Day to Day report after fasting periods summary:
 
 ### 4.5 Phase 5: Testing & Validation
 
-**Tasks**:
+**Tasks:**
 
 - [ ] Test with real user data
 - [ ] Validate recommendations against known good adjustments
@@ -348,20 +348,20 @@ Add new section to Day to Day report after fasting periods summary:
 
 ## 8. Open Questions
 
-1. **Q**: Should we integrate with existing basal profile data?
-   **A**: TBD - Need to investigate how profiles are stored and accessed
+1. **Q:** Should we integrate with existing basal profile data?  
+   **A:** TBD - Need to investigate how profiles are stored and accessed
 
-2. **Q**: What default insulin sensitivity factor should we use?
-   **A**: TBD - Research typical values, possibly 50 mg/dL per U as starting point
+2. **Q:** What default insulin sensitivity factor should we use?  
+   **A:** TBD - Research typical values, possibly 50 mg/dL per U as starting point
 
-3. **Q**: Should recommendations be exportable (PDF, CSV)?
-   **A**: TBD - User feedback needed, likely yes for healthcare provider discussions
+3. **Q:** Should recommendations be exportable (PDF, CSV)?  
+   **A:** TBD - User feedback needed, likely yes for healthcare provider discussions
 
-4. **Q**: Should we track which recommendations users implement?
-   **A**: TBD - Privacy considerations, but could be valuable for validation
+4. **Q:** Should we track which recommendations users implement?  
+   **A:** TBD - Privacy considerations, but could be valuable for validation
 
-5. **Q**: How do we handle users on insulin pumps vs. MDI?
-   **A**: TBD - May need different recommendation strategies
+5. **Q:** How do we handle users on insulin pumps vs. MDI?  
+   **A:** TBD - May need different recommendation strategies
 
 ---
 
@@ -424,6 +424,6 @@ Calculation:
 
 ---
 
-**Document Status**: Ready for review and feedback
-**Next Steps**: Review requirements, refine design, begin Phase 1 implementation
+**Document Status:** Ready for review and feedback  
+**Next Steps:** Review requirements, refine design, begin Phase 1 implementation
 
