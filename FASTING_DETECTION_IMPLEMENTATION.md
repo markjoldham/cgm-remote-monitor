@@ -54,10 +54,22 @@ I've successfully implemented a comprehensive Fasting Period Detection Algorithm
 5. **Maximum duration** (default: 12 hours)
 
 ### Quality Assessment:
-- **Excellent**: 6+ hours overnight with high glucose stability
-- **Good**: 4+ hours with good stability
-- **Fair**: 3+ hours with moderate stability
-- **Poor**: <3 hours or high glucose variability
+- **Excellent**: 6+ hours overnight with CV <20% and high time in range
+- **Good**: 4+ hours with CV 20-30% and good stability
+- **Fair**: 3+ hours with CV 30-40% or moderate stability
+- **Poor**: <3 hours or CV >40% (high glucose variability)
+
+### Glucose Stability Metrics:
+- **CV (Coefficient of Variation)**: Industry standard for glucose variability (StdDev/Mean × 100)
+  - Excellent: <20%
+  - Good: 20-30%
+  - Fair: 30-40%
+  - Poor: >40%
+- **Time in Range**: Percentage of readings between 70-180 mg/dL
+- **Trend Analysis**: Rising, falling, or stable glucose patterns
+- **Rate of Change**: mg/dL per hour during the period
+- **Quality Score**: 0-100 composite score for basal testing suitability
+  - Factors: CV (40%), Time in Range (30%), Trend stability (20%), Duration (10%)
 
 ### Period Classification:
 - **Overnight** (22:00-08:00): Most valuable for basal testing
@@ -102,10 +114,12 @@ I've successfully implemented a comprehensive Fasting Period Detection Algorithm
 4. **Highlights overnight periods** (most important for basal testing)
 
 ### Clinical Value:
-1. **Evidence-based basal adjustments** using stable periods
+1. **Evidence-based basal adjustments** using stable periods with low CV
 2. **Dawn phenomenon detection** through morning fasting analysis
-3. **Comprehensive glucose stability metrics**
+3. **Comprehensive glucose stability metrics** including CV, time in range, and trends
 4. **Historical trend analysis** across multiple days
+5. **Quality scoring** helps identify most reliable periods for basal testing
+6. **Rate of change analysis** detects subtle basal inadequacies
 
 ### User Experience:
 1. **Visual indicators** make fasting periods obvious
@@ -130,10 +144,15 @@ I've successfully implemented a comprehensive Fasting Period Detection Algorithm
 
 ### Optimal Usage:
 1. **Review overnight periods** (22:00-08:00) for primary basal testing
-2. **Look for "excellent" quality periods** (6+ hours, high stability)
-3. **Use glucose stability metrics** to assess basal adequacy
+2. **Look for "excellent" quality periods** (6+ hours, CV <20%)
+3. **Use glucose stability metrics** to assess basal adequacy:
+   - CV <20% indicates excellent basal control
+   - Time in range >80% is ideal
+   - Stable trend (not rising/falling) suggests appropriate basal rates
+   - Quality score >70 indicates highly reliable period
 4. **Compare multiple days** to identify patterns
 5. **Focus on periods with <30 mg/dL glucose range** for best analysis
+6. **Check rate of change** - should be near 0 mg/dL/hr for proper basal rates
 
 ## Technical Implementation
 
@@ -150,3 +169,66 @@ I've successfully implemented a comprehensive Fasting Period Detection Algorithm
 - **24+ hours of data** for meaningful results
 
 This implementation provides Nightscout users with a powerful tool for identifying optimal periods for basal rate analysis, making diabetes management more data-driven and effective.
+
+## Glucose Stability Analysis Details
+
+### Coefficient of Variation (CV%)
+The CV is the gold standard metric for assessing glucose variability in diabetes management. It's calculated as:
+```
+CV% = (Standard Deviation / Mean) × 100
+```
+
+**Clinical Interpretation:**
+- **<20%**: Excellent glucose stability - ideal for basal testing
+- **20-30%**: Good stability - acceptable for basal analysis
+- **30-40%**: Fair stability - may indicate basal adjustments needed
+- **>40%**: Poor stability - not reliable for basal testing
+
+### Time in Range (TIR)
+Percentage of glucose readings within the target range of 70-180 mg/dL during the fasting period.
+
+**Clinical Significance:**
+- **>80%**: Excellent - basal rates are likely appropriate
+- **60-80%**: Good - minor adjustments may be beneficial
+- **<60%**: Poor - basal rates likely need adjustment
+
+### Trend Analysis
+Compares the first third vs. last third of the fasting period to detect overall glucose direction:
+- **Stable**: Change <15 mg/dL - indicates appropriate basal rates
+- **Rising**: Change >15 mg/dL upward - may need increased basal
+- **Falling**: Change >15 mg/dL downward - may need decreased basal
+
+### Rate of Change
+Measures glucose change per hour during the fasting period:
+- **Near 0 mg/dL/hr**: Ideal - basal rates are appropriate
+- **+5 to +15 mg/dL/hr**: Mild rise - consider small basal increase
+- **-5 to -15 mg/dL/hr**: Mild fall - consider small basal decrease
+- **>±15 mg/dL/hr**: Significant trend - basal adjustment likely needed
+
+### Quality Score Algorithm
+Composite score (0-100) weighing multiple factors:
+- **CV Score (40%)**: Lower CV = higher score
+- **Time in Range (30%)**: Higher TIR = higher score
+- **Trend Stability (20%)**: Stable trend = higher score
+- **Duration (10%)**: Longer period = higher score
+
+**Score Interpretation:**
+- **>70**: Excellent for basal testing - high confidence
+- **50-70**: Good for basal testing - moderate confidence
+- **<50**: Fair/poor - use with caution or find better period
+
+### Visual Indicators
+The Day to Day report uses color coding to quickly identify quality:
+- **Green**: Excellent CV (<20%)
+- **Blue**: Good CV (20-30%)
+- **Orange**: Fair CV (30-40%)
+- **Red**: Poor CV (>40%)
+
+### Educational Display
+The report includes a comprehensive metrics table explaining:
+- What each metric measures
+- Ideal values for basal testing
+- How to interpret the results
+- Clinical significance of each measurement
+
+This detailed analysis empowers users to make informed decisions about basal rate adjustments based on objective, quantifiable glucose stability metrics.
