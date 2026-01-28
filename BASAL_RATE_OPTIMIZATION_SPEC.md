@@ -8,16 +8,20 @@
 
 ## 1. Overview
 
+
 ### 1.1 Purpose
+
 Provide intelligent, safety-focused recommendations for basal rate adjustments based on statistical analysis of fasting period glucose data.
 
 ### 1.2 Goals
+
 - Analyze glucose stability during fasting periods to identify basal rate issues
 - Use statistical models to recommend specific rate adjustments
 - Prioritize safety with conservative recommendations and clear warnings
 - Provide actionable insights that users can discuss with their healthcare providers
 
 ### 1.3 Non-Goals
+
 - Automatic basal rate adjustments (user must manually review and apply)
 - Real-time recommendations (analysis is retrospective)
 - Replacing medical advice (tool provides data for informed discussions)
@@ -26,9 +30,11 @@ Provide intelligent, safety-focused recommendations for basal rate adjustments b
 
 ## 2. Requirements
 
+
 ### 2.1 Functional Requirements
 
 #### FR-1: Statistical Analysis
+
 - **FR-1.1**: Calculate glucose trend (rising/falling/stable) during fasting periods
 - **FR-1.2**: Compute rate of change (mg/dL per hour)
 - **FR-1.3**: Determine statistical significance of trends
@@ -36,6 +42,7 @@ Provide intelligent, safety-focused recommendations for basal rate adjustments b
 - **FR-1.5**: Calculate confidence intervals for recommendations
 
 #### FR-2: Basal Rate Recommendations
+
 - **FR-2.1**: Suggest specific rate adjustments (e.g., "+0.05 U/hr", "-0.10 U/hr")
 - **FR-2.2**: Provide time-of-day specific recommendations
 - **FR-2.3**: Calculate recommended adjustment magnitude based on:
@@ -46,6 +53,7 @@ Provide intelligent, safety-focused recommendations for basal rate adjustments b
 - **FR-2.4**: Prioritize recommendations by impact and confidence
 
 #### FR-3: Safety Features
+
 - **FR-3.1**: Flag periods with high variability as unsuitable for basal testing
 - **FR-3.2**: Require minimum fasting duration (4+ hours) for recommendations
 - **FR-3.3**: Limit maximum recommended adjustment (e.g., ±20% of current rate)
@@ -54,6 +62,7 @@ Provide intelligent, safety-focused recommendations for basal rate adjustments b
 - **FR-3.6**: Require multiple confirming periods before strong recommendations
 
 #### FR-4: Visualization
+
 - **FR-4.1**: Display recommendations in the fasting periods summary
 - **FR-4.2**: Show confidence level for each recommendation
 - **FR-4.3**: Provide visual indicators (color coding) for recommendation strength
@@ -62,16 +71,19 @@ Provide intelligent, safety-focused recommendations for basal rate adjustments b
 ### 2.2 Non-Functional Requirements
 
 #### NFR-1: Safety
+
 - All recommendations must be conservative (prefer under-adjustment to over-adjustment)
 - Clear disclaimers that recommendations are not medical advice
 - Prominent warnings for any safety concerns
 
 #### NFR-2: Usability
+
 - Recommendations must be easy to understand for non-technical users
 - Provide context and reasoning for each recommendation
 - Allow users to export recommendations for discussion with healthcare providers
 
 #### NFR-3: Performance
+
 - Analysis should complete within 5 seconds for 7 days of data
 - No impact on existing report generation performance
 
@@ -79,9 +91,11 @@ Provide intelligent, safety-focused recommendations for basal rate adjustments b
 
 ## 3. Design
 
+
 ### 3.1 Statistical Model
 
 #### 3.1.1 Trend Analysis
+
 ```
 For each fasting period:
 1. Calculate linear regression of glucose over time
@@ -94,6 +108,7 @@ For each fasting period:
 ```
 
 #### 3.1.2 Basal Rate Adjustment Calculation
+
 ```
 Base adjustment formula:
 adjustment_U_per_hr = (slope_mg_dL_per_hr / sensitivity_factor) * safety_multiplier
@@ -111,6 +126,7 @@ Example:
 ```
 
 #### 3.1.3 Confidence Scoring
+
 ```
 Confidence score (0-100):
 - Duration score: min(duration_hours / 6, 1.0) * 30
@@ -127,7 +143,9 @@ Total confidence = sum of above scores
 ### 3.2 Safety Rules
 
 #### 3.2.1 Disqualification Criteria
+
 A fasting period is disqualified from recommendations if:
+
 - Duration < 4 hours
 - CV% > 30% (too variable)
 - Contains hypoglycemia (glucose < 70 mg/dL for > 15 minutes)
@@ -136,12 +154,15 @@ A fasting period is disqualified from recommendations if:
 - Active insulin on board (if IOB data available)
 
 #### 3.2.2 Adjustment Limits
+
 - Maximum single adjustment: ±0.15 U/hr
 - Maximum percentage change: ±20% of current basal rate
 - Minimum adjustment threshold: 0.025 U/hr (below this, recommend no change)
 
 #### 3.2.3 Confirmation Requirements
+
 For high-confidence recommendations:
+
 - Require 2+ qualifying periods showing same trend
 - Periods should be from different days
 - Trends should be consistent (same direction, similar magnitude)
@@ -149,6 +170,7 @@ For high-confidence recommendations:
 ### 3.3 User Interface Design
 
 #### 3.3.1 Recommendations Section
+
 Add new section to Day to Day report after fasting periods summary:
 
 ```
@@ -193,7 +215,7 @@ Add new section to Day to Day report after fasting periods summary:
 │ │ • Need more data for confident recommendation        │   │
 │ └──────────────────────────────────────────────────────┘   │
 │                                                              │
-│ 💡 Tips:                                                     │
+│ � Tips:                                                     │
 │ • Test one time period at a time                            │
 │ • Wait 2-3 days between adjustments                         │
 │ • Monitor for hypoglycemia after increases                  │
@@ -203,6 +225,7 @@ Add new section to Day to Day report after fasting periods summary:
 ```
 
 #### 3.3.2 Color Coding
+
 - 🟢 Green: High confidence (70-100), safe to implement
 - 🟡 Yellow: Medium confidence (50-69), consider with caution
 - 🔴 Red: Low confidence (0-49) or safety concerns, do not implement
@@ -211,10 +234,13 @@ Add new section to Day to Day report after fasting periods summary:
 
 ## 4. Implementation Plan
 
+
 ### 4.1 Phase 1: Statistical Analysis Engine
+
 **Files**: `lib/report_plugins/basal-rate-optimizer.js`
 
 **Tasks**:
+
 - [ ] Implement linear regression for glucose trends
 - [ ] Calculate R² and confidence intervals
 - [ ] Compute rate of change with statistical significance
@@ -222,9 +248,11 @@ Add new section to Day to Day report after fasting periods summary:
 - [ ] Unit tests for statistical functions
 
 ### 4.2 Phase 2: Recommendation Engine
+
 **Files**: `lib/report_plugins/basal-rate-optimizer.js`
 
 **Tasks**:
+
 - [ ] Implement basal rate adjustment calculation
 - [ ] Apply safety rules and limits
 - [ ] Calculate confidence scores
@@ -232,9 +260,11 @@ Add new section to Day to Day report after fasting periods summary:
 - [ ] Require confirmation from multiple periods
 
 ### 4.3 Phase 3: Safety Validation
+
 **Files**: `lib/report_plugins/basal-rate-optimizer.js`
 
 **Tasks**:
+
 - [ ] Implement disqualification criteria
 - [ ] Add hypoglycemia detection
 - [ ] Validate adjustment limits
@@ -242,9 +272,11 @@ Add new section to Day to Day report after fasting periods summary:
 - [ ] Safety unit tests
 
 ### 4.4 Phase 4: UI Integration
+
 **Files**: `lib/report_plugins/daytoday.js`
 
 **Tasks**:
+
 - [ ] Add recommendations section to report
 - [ ] Implement color coding
 - [ ] Add explanatory text
@@ -252,7 +284,9 @@ Add new section to Day to Day report after fasting periods summary:
 - [ ] Add export functionality
 
 ### 4.5 Phase 5: Testing & Validation
+
 **Tasks**:
+
 - [ ] Test with real user data
 - [ ] Validate recommendations against known good adjustments
 - [ ] User acceptance testing
@@ -263,13 +297,16 @@ Add new section to Day to Day report after fasting periods summary:
 
 ## 5. Data Requirements
 
+
 ### 5.1 Required Data
+
 - Fasting period glucose readings (from existing detection)
 - Fasting period metadata (start/end times, duration, quality)
 - User's basal profile (if available)
 - User's insulin sensitivity factor (optional, use default if not available)
 
 ### 5.2 Optional Data
+
 - IOB (insulin on board) data
 - Recent meal/bolus history
 - User's target range
@@ -279,7 +316,9 @@ Add new section to Day to Day report after fasting periods summary:
 
 ## 6. Risk Assessment
 
+
 ### 6.1 Safety Risks
+
 | Risk | Severity | Mitigation |
 |------|----------|------------|
 | Incorrect recommendation causes hypoglycemia | HIGH | Conservative adjustments, multiple confirmations, clear warnings |
@@ -288,6 +327,7 @@ Add new section to Day to Day report after fasting periods summary:
 | Insufficient data leads to poor recommendation | LOW | Require minimum data quality, show confidence scores |
 
 ### 6.2 Technical Risks
+
 | Risk | Severity | Mitigation |
 |------|----------|------------|
 | Performance impact on report generation | LOW | Optimize algorithms, cache calculations |
@@ -298,12 +338,15 @@ Add new section to Day to Day report after fasting periods summary:
 
 ## 7. Success Metrics
 
+
 ### 7.1 Quantitative Metrics
+
 - Recommendation accuracy: 80%+ of recommendations improve glucose stability
 - User adoption: 30%+ of users with fasting data view recommendations
 - Safety: Zero reported hypoglycemia incidents from following recommendations
 
 ### 7.2 Qualitative Metrics
+
 - User feedback: Recommendations are clear and actionable
 - Healthcare provider feedback: Data is useful for clinical discussions
 - User confidence: Users feel empowered to optimize their therapy
@@ -311,6 +354,7 @@ Add new section to Day to Day report after fasting periods summary:
 ---
 
 ## 8. Open Questions
+
 
 1. **Q**: Should we integrate with existing basal profile data?
    **A**: TBD - Need to investigate how profiles are stored and accessed
@@ -331,12 +375,15 @@ Add new section to Day to Day report after fasting periods summary:
 
 ## 9. References
 
+
 ### 9.1 Clinical Guidelines
+
 - ADA Standards of Care: Basal insulin adjustment guidelines
 - ISPAD Guidelines: Pediatric basal rate optimization
 - Think Like a Pancreas: Practical basal testing methodology
 
 ### 9.2 Technical References
+
 - Linear regression algorithms
 - Statistical significance testing
 - Insulin pharmacokinetics
@@ -346,9 +393,11 @@ Add new section to Day to Day report after fasting periods summary:
 
 ## 10. Appendix
 
+
 ### 10.1 Example Calculations
 
 **Example 1: Rising Glucose Overnight**
+
 ```
 Input:
 - Fasting period: 10 PM - 6 AM (8 hours)
@@ -366,6 +415,7 @@ Calculation:
 ```
 
 **Example 2: Falling Glucose Morning**
+
 ```
 Input:
 - Fasting period: 6 AM - 10 AM (4 hours)
@@ -386,3 +436,4 @@ Calculation:
 
 **Document Status**: Ready for review and feedback
 **Next Steps**: Review requirements, refine design, begin Phase 1 implementation
+
