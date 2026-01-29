@@ -1,5 +1,7 @@
 # Basal Rate Optimizer - User Guide
 
+**Author:** Mark Oldham
+
 ## Overview
 
 The Basal Rate Optimizer is an advanced feature in Nightscout that analyzes your glucose data during fasting periods to provide data-driven recommendations for adjusting your basal insulin rates. It uses statistical analysis and accounts for automated insulin delivery (temp basals, SMBs) to identify whether your programmed basal rates are appropriately set.
@@ -53,7 +55,7 @@ For each qualifying fasting period, the system calculates:
 
 The system analyzes treatment data during each fasting period to calculate:
 
-```
+```text
 Programmed Insulin = Basal Rate × Duration
 Actual Insulin = Temp Basals + SMBs + Programmed Basal
 Extra Insulin = Actual Insulin - Programmed Insulin
@@ -77,7 +79,7 @@ If your glucose is stable or rising DESPITE receiving extra insulin from automat
 
 The system calculates recommended adjustments using this formula:
 
-```
+```text
 Base Adjustment = (Slope / ISF) × Safety Multiplier
 Automation Adjustment = Extra Insulin Per Hour (if glucose not falling)
 Total Adjustment = Base Adjustment + Automation Adjustment
@@ -95,32 +97,35 @@ Total Adjustment = Base Adjustment + Automation Adjustment
 **Logic:**
 
 1. **If glucose rising/stable + extra insulin delivered:**
-  - Add full automation adjustment
-  - Basal rate is too low; automation is compensating
 
-2. **If glucose falling + extra insulin delivered:**
-  - Add 50% of automation adjustment
-  - Be conservative; fall might be from automation
+- Add full automation adjustment
+- Basal rate is too low; automation is compensating
 
-3. **If no automation detected:**
-  - Use only base adjustment from slope
+1. **If glucose falling + extra insulin delivered:**
+
+- Add 50% of automation adjustment
+- Be conservative; fall might be from automation
+
+1. **If no automation detected:**
+
+- Use only base adjustment from slope
 
 ### 5. Safety Limits
 
 All calculated adjustments are capped by multiple safety limits:
 
-**Minimum Threshold: 0.05 U/hr**
+#### Minimum Threshold: 0.05 U/hr
 
 - Adjustments smaller than this are set to zero
 - Prevents insignificant micro-adjustments
 
-**Percentage Limit: 40% of Current Basal Rate**
+#### Percentage Limit: 40% of Current Basal Rate
 
 - Maximum adjustment is 40% of your current rate
 - Example: 1.0 U/hr basal → max ±0.40 U/hr adjustment
 - Prevents excessive changes relative to current settings
 
-**Absolute Limit: 60% of TDD / 24 hours**
+#### Absolute Limit: 60% of TDD / 24 hours
 
 - Based on your Total Daily Dose of insulin
 - Calculated from actual insulin delivery over the analysis period
@@ -136,19 +141,23 @@ Fasting periods must pass strict safety checks to be used for recommendations:
 **Disqualification Rules:**
 
 1. **Duration < 4 hours**
-  - Not enough time to assess basal effectiveness
 
-2. **CV% > 30%**
-  - Too much glucose variability
-  - Indicates other factors affecting glucose
+- Not enough time to assess basal effectiveness
 
-3. **Hypoglycemia detected**
-  - Any glucose < 70 mg/dL for > 15 consecutive minutes
-  - Safety concern; period not reliable
+1. **CV% > 30%**
 
-4. **Hyperglycemia detected**
-  - Any glucose reading > 250 mg/dL
-  - Indicates other issues (illness, pump failure, etc.)
+- Too much glucose variability
+- Indicates other factors affecting glucose
+
+1. **Hypoglycemia detected**
+
+- Any glucose < 70 mg/dL for > 15 consecutive minutes
+- Safety concern; period not reliable
+
+1. **Hyperglycemia detected**
+
+- Any glucose reading > 250 mg/dL
+- Indicates other issues (illness, pump failure, etc.)
 
 ### 7. Confidence Scoring
 
@@ -173,16 +182,19 @@ Each recommendation receives a confidence score (0-100) based on:
 - R² > 0.8 gets near-full points
 
 **Consistency Factor (20 points max):**
+
 - Multiple periods showing same trend = more reliable
 - Score = (Matching Periods / Total Periods) × 20
 - All periods agreeing gets full points
 
 **Confidence Levels:**
+
 - **High (70-100)**: Strong recommendation, multiple confirming periods
 - **Medium (50-69)**: Moderate recommendation, some uncertainty
 - **Low (0-49)**: Weak recommendation, limited or conflicting data
 
 **Multi-Period Confirmation:**
+
 - High confidence requires ≥2 qualifying periods from different days
 - All periods must show the same trend direction
 - Prevents recommendations based on isolated incidents
@@ -215,6 +227,7 @@ Each block is analyzed independently with its own recommendation.
 ### Step 2: Review Fasting Periods
 
 Scroll to the "Fasting Periods Analysis" section to see:
+
 - Total fasting periods found
 - Quality ratings (excellent, good, fair)
 - Glucose stability metrics for each period
@@ -248,12 +261,14 @@ The "Basal Rate Optimization Recommendations" section shows:
 ### Step 4: Export Data
 
 **CSV Export:**
+
 - Click "Export to CSV" button
 - Opens in Excel/Google Sheets
 - Includes all recommendations and supporting data
 - Share with healthcare provider
 
 **PDF Export:**
+
 - Click "Export to PDF" button
 - Opens print dialog
 - Choose "Save as PDF"
@@ -264,44 +279,52 @@ The "Basal Rate Optimization Recommendations" section shows:
 **⚠️ CRITICAL SAFETY GUIDELINES:**
 
 1. **Consult Your Healthcare Provider First**
-  - Review recommendations with your doctor or diabetes educator
-  - Get approval before making changes
-  - Discuss your individual circumstances
 
-2. **Test One Time Period at a Time**
-  - Only adjust one basal rate segment at a time
-  - This allows you to clearly see the effect of each change
-  - Don't change multiple segments simultaneously
+- Review recommendations with your doctor or diabetes educator
+- Get approval before making changes
+- Discuss your individual circumstances
 
-3. **Wait 2-3 Days Between Adjustments**
-  - Give your body time to adjust
-  - Collect enough data to assess the change
-  - Don't rush the process
+1. **Test One Time Period at a Time**
 
-4. **Start with High-Confidence Recommendations**
-  - Prioritize green (high confidence) recommendations
-  - These have the strongest supporting data
-  - Be more cautious with yellow or red recommendations
+- Only adjust one basal rate segment at a time
+- This allows you to clearly see the effect of each change
+- Don't change multiple segments simultaneously
 
-5. **Be Conservative**
-  - Consider making smaller adjustments than recommended
-  - You can always increase more later
-  - It's safer to under-adjust than over-adjust
+1. **Wait 2-3 Days Between Adjustments**
 
-6. **Monitor Closely for Hypoglycemia**
-  - Watch for low blood sugar, especially after rate increases
-  - Have fast-acting carbs readily available
-  - Consider temporary lower targets initially
+- Give your body time to adjust
+- Collect enough data to assess the change
+- Don't rush the process
 
-7. **Keep Detailed Notes**
-  - Document all changes in your diabetes management app
-  - Note the date, time block, old rate, new rate
-  - Track observed effects over the following days
+1. **Start with High-Confidence Recommendations**
 
-8. **Verify with Basal Testing**
-  - After making changes, do traditional basal testing
-  - Skip meals and monitor glucose for 4-6 hours
-  - Confirm the new rate keeps glucose stable
+- Prioritize green (high confidence) recommendations
+- These have the strongest supporting data
+- Be more cautious with yellow or red recommendations
+
+1. **Be Conservative**
+
+- Consider making smaller adjustments than recommended
+- You can always increase more later
+- It's safer to under-adjust than over-adjust
+
+1. **Monitor Closely for Hypoglycemia**
+
+- Watch for low blood sugar, especially after rate increases
+- Have fast-acting carbs readily available
+- Consider temporary lower targets initially
+
+1. **Keep Detailed Notes**
+
+- Document all changes in your diabetes management app
+- Note the date, time block, old rate, new rate
+- Track observed effects over the following days
+
+1. **Verify with Basal Testing**
+
+- After making changes, do traditional basal testing
+- Skip meals and monitor glucose for 4-6 hours
+- Confirm the new rate keeps glucose stable
 
 ---
 
@@ -310,35 +333,40 @@ The "Basal Rate Optimization Recommendations" section shows:
 ### Example Calculation
 
 **Scenario:**
+
 - Overnight fasting period: 8 hours
 - Average glucose slope: +10 mg/dL/hr (rising)
 - ISF: 50 mg/dL per unit
 - Current basal rate: 1.0 U/hr
 - Extra insulin from automation: 2.4 U over 8 hours = 0.30 U/hr
 
-**Step 1: Base Adjustment**
-```
+#### Step 1: Base Adjustment
+
+```text
 Base Adjustment = (Slope / ISF) × Safety Multiplier
 Base Adjustment = (10 / 50) × 0.75
 Base Adjustment = 0.20 × 0.75
 Base Adjustment = 0.15 U/hr
 ```
 
-**Step 2: Automation Adjustment**
-```
+#### Step 2: Automation Adjustment
+
+```text
 Since glucose is rising (slope > -5), add full automation adjustment:
 Automation Adjustment = 0.30 U/hr
 ```
 
-**Step 3: Total Adjustment**
-```
+#### Step 3: Total Adjustment
+
+```text
 Total Adjustment = Base Adjustment + Automation Adjustment
 Total Adjustment = 0.15 + 0.30
 Total Adjustment = 0.45 U/hr
 ```
 
-**Step 4: Apply Safety Limits**
-```
+#### Step 4: Apply Safety Limits
+
+```text
 TDD = 50 U/day
 Absolute Limit = (50 × 0.60) / 24 = 1.25 U/hr ✓ (not exceeded)
 Percentage Limit = 1.0 × 0.40 = 0.40 U/hr ✗ (exceeded!)
@@ -346,8 +374,9 @@ Percentage Limit = 1.0 × 0.40 = 0.40 U/hr ✗ (exceeded!)
 Final Adjustment = 0.40 U/hr (capped by percentage limit)
 ```
 
-**Step 5: Calculate New Rate**
-```
+#### Step 5: Calculate New Rate
+
+```text
 New Basal Rate = Current Rate + Adjustment
 New Basal Rate = 1.0 + 0.40
 New Basal Rate = 1.40 U/hr
@@ -362,6 +391,7 @@ New Basal Rate = 1.40 U/hr
 ### High Confidence, Increase Recommended
 
 **What it means:**
+
 - Multiple fasting periods show glucose rising
 - Automation is delivering extra insulin to compensate
 - Your basal rate is too low for this time period
@@ -375,6 +405,7 @@ New Basal Rate = 1.40 U/hr
 ### High Confidence, Decrease Recommended
 
 **What it means:**
+
 - Multiple fasting periods show glucose falling
 - Little to no extra insulin from automation
 - Your basal rate is too high for this time period
@@ -388,6 +419,7 @@ New Basal Rate = 1.40 U/hr
 ### Medium/Low Confidence
 
 **What it means:**
+
 - Limited data or conflicting trends
 - High glucose variability
 - May need more fasting periods for reliable recommendation
@@ -401,6 +433,7 @@ New Basal Rate = 1.40 U/hr
 ### No Change Recommended
 
 **What it means:**
+
 - Glucose is stable during fasting periods
 - Minimal extra insulin from automation
 - Current basal rate appears appropriate
@@ -532,34 +565,40 @@ The system detects automated insulin delivery from:
 ### What This Tool Does NOT Account For
 
 1. **Exercise and Activity**
-  - Physical activity affects insulin sensitivity
-  - May cause glucose drops unrelated to basal rates
-  - Consider excluding exercise days from analysis
 
-2. **Illness and Stress**
-  - Increases insulin resistance
-  - Temporary changes, not indicative of basal needs
-  - Exclude sick days from analysis
+- Physical activity affects insulin sensitivity
+- May cause glucose drops unrelated to basal rates
+- Consider excluding exercise days from analysis
 
-3. **Hormonal Cycles**
-  - Menstrual cycles affect insulin sensitivity
-  - May need different basal rates at different cycle phases
-  - Consider analyzing by cycle phase
+1. **Illness and Stress**
 
-4. **Alcohol Consumption**
-  - Affects glucose metabolism
-  - Can cause delayed hypoglycemia
-  - Exclude periods after alcohol consumption
+- Increases insulin resistance
+- Temporary changes, not indicative of basal needs
+- Exclude sick days from analysis
 
-5. **Site Changes and Pump Issues**
-  - New infusion sites may absorb differently
-  - Pump malfunctions affect insulin delivery
-  - Exclude days with site/pump issues
+1. **Hormonal Cycles**
 
-6. **Medication Changes**
-  - Steroids, beta blockers, etc. affect insulin needs
-  - Temporary adjustments may be needed
-  - Consult healthcare provider
+- Menstrual cycles affect insulin sensitivity
+- May need different basal rates at different cycle phases
+- Consider analyzing by cycle phase
+
+1. **Alcohol Consumption**
+
+- Affects glucose metabolism
+- Can cause delayed hypoglycemia
+- Exclude periods after alcohol consumption
+
+1. **Site Changes and Pump Issues**
+
+- New infusion sites may absorb differently
+- Pump malfunctions affect insulin delivery
+- Exclude days with site/pump issues
+
+1. **Medication Changes**
+
+- Steroids, beta blockers, etc. affect insulin needs
+- Temporary adjustments may be needed
+- Consult healthcare provider
 
 ### When NOT to Use This Tool
 
@@ -622,8 +661,7 @@ The system detects automated insulin delivery from:
 For issues, questions, or feedback:
 
 - Check Nightscout documentation
-- Post in Nightscout community forums
-- Report bugs on GitHub
+- Send a message to Mark Oldham
 - Consult your healthcare provider for medical questions
 
 ---
