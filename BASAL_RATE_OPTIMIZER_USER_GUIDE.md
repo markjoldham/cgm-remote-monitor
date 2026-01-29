@@ -19,6 +19,7 @@ The system automatically identifies fasting periods in your data by looking for:
 - Adequate CGM data coverage
 
 Fasting periods are ideal for basal rate analysis because:
+
 - No food is being digested (no carb impact)
 - Insulin on board is minimal
 - Glucose changes reflect basal insulin effectiveness
@@ -208,6 +209,7 @@ Scroll to the "Fasting Periods Analysis" section to see:
 - Glucose stability metrics for each period
 
 **Look for:**
+
 - Periods with low CV% (<20% is excellent)
 - High time in range (>80%)
 - Stable trends
@@ -218,6 +220,7 @@ Scroll to the "Fasting Periods Analysis" section to see:
 The "Basal Rate Optimization Recommendations" section shows:
 
 **For each time block:**
+
 - Current basal rate
 - Recommended adjustment (if any)
 - New basal rate
@@ -226,6 +229,7 @@ The "Basal Rate Optimization Recommendations" section shows:
 - Warnings and considerations
 
 **Color Coding:**
+
 - 🟢 **Green (High Confidence)**: Strong recommendation, prioritize these
 - 🟡 **Yellow (Medium Confidence)**: Moderate recommendation, consider carefully
 - 🔴 **Red (Low Confidence)**: Weak recommendation, may need more data
@@ -352,6 +356,7 @@ New Basal Rate = 1.40 U/hr
 - Your basal rate is too low for this time period
 
 **Action:**
+
 - Strong recommendation to increase basal rate
 - Consult healthcare provider
 - Implement change carefully with monitoring
@@ -364,6 +369,7 @@ New Basal Rate = 1.40 U/hr
 - Your basal rate is too high for this time period
 
 **Action:**
+
 - Strong recommendation to decrease basal rate
 - Consult healthcare provider
 - Monitor closely for hyperglycemia after change
@@ -376,6 +382,7 @@ New Basal Rate = 1.40 U/hr
 - May need more fasting periods for reliable recommendation
 
 **Action:**
+
 - Collect more data before making changes
 - Review individual period details
 - Consider other factors (illness, stress, activity)
@@ -388,6 +395,7 @@ New Basal Rate = 1.40 U/hr
 - Current basal rate appears appropriate
 
 **Action:**
+
 - No adjustment needed for this time block
 - Continue monitoring
 - Reassess if patterns change
@@ -399,12 +407,14 @@ New Basal Rate = 1.40 U/hr
 ### "No qualifying fasting periods found"
 
 **Possible causes:**
+
 - Periods too short (< 4 hours)
 - High glucose variability (CV% > 30%)
 - Hypoglycemia or hyperglycemia present
 - Not enough meal-free time in data
 
 **Solutions:**
+
 - Extend date range to capture more days
 - Review fasting period details to see disqualification reasons
 - Ensure adequate meal-free periods (skip snacks)
@@ -413,11 +423,13 @@ New Basal Rate = 1.40 U/hr
 ### "All periods showing 0 confidence"
 
 **Possible causes:**
+
 - Missing glucose readings data
 - Data validation failures
 - Software version mismatch
 
 **Solutions:**
+
 - Ensure you're running the latest version
 - Check browser console for errors
 - Verify CGM data is uploading correctly
@@ -426,6 +438,7 @@ New Basal Rate = 1.40 U/hr
 ### Recommendations seem too aggressive/conservative
 
 **Adjustable parameters:**
+
 - Safety multiplier (currently 0.75)
 - Percentage limit (currently 40%)
 - Absolute limit formula (currently 60% TDD / 24h)
@@ -436,11 +449,13 @@ New Basal Rate = 1.40 U/hr
 ### Conflicting recommendations over time
 
 **This is normal:**
+
 - Insulin needs change with seasons, activity, stress, illness
 - Hormonal cycles affect insulin sensitivity
 - Weight changes impact insulin requirements
 
 **Action:**
+
 - Use most recent data (last 7-14 days)
 - Consider current life circumstances
 - Reassess regularly (monthly or when patterns change)
@@ -452,11 +467,13 @@ New Basal Rate = 1.40 U/hr
 ### Data Requirements
 
 **Minimum:**
+
 - 7 days of CGM data
 - Treatment data (carbs, insulin)
 - At least 2 qualifying fasting periods per time block
 
 **Optimal:**
+
 - 14-30 days of data
 - 3+ qualifying fasting periods per time block
 - Complete CGM coverage (>80% of time)
@@ -472,11 +489,13 @@ New Basal Rate = 1.40 U/hr
 ### Profile Data Integration
 
 The system reads from your Nightscout profile:
+
 - Basal rate schedule (all segments)
 - ISF (Insulin Sensitivity Factor)
 - Target glucose range (for time-in-range calculations)
 
 **If profile data is missing:**
+
 - Default ISF: 50 mg/dL per unit
 - Default basal rate: 1.0 U/hr
 - Warning displayed in recommendations
@@ -484,11 +503,13 @@ The system reads from your Nightscout profile:
 ### Automation Detection
 
 The system detects automated insulin delivery from:
+
 - **Temp Basals**: Rate adjustments from Loop/AAPS/OpenAPS
 - **SMBs**: Super Micro Boluses from advanced algorithms
 - **Correction Boluses**: Manual or automated corrections
 
 **Treatment data analyzed:**
+
 - Event type: "Temp Basal"
 - Rate and duration fields
 - Insulin/bolus amounts (excluding meal boluses)
@@ -588,6 +609,7 @@ The system detects automated insulin delivery from:
 ## Support and Feedback
 
 For issues, questions, or feedback:
+
 - Check Nightscout documentation
 - Post in Nightscout community forums
 - Report bugs on GitHub
