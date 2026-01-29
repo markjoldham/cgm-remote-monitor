@@ -82,8 +82,8 @@ Total Adjustment = Base Adjustment + Automation Adjustment
 
 - **Slope**: Rate of glucose change (mg/dL per hour)
 - **ISF**: Insulin Sensitivity Factor (how much 1 unit drops glucose)
-  - Read from your Nightscout profile
-  - Default: 50 mg/dL per unit if not set
+    - Read from your Nightscout profile
+    - Default: 50 mg/dL per unit if not set
 - **Safety Multiplier**: 0.75 (makes recommendations conservative)
 - **Automation Adjustment**: Accounts for extra insulin delivered
 
