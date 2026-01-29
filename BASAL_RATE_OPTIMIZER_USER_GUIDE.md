@@ -82,23 +82,23 @@ Total Adjustment = Base Adjustment + Automation Adjustment
 
 - **Slope**: Rate of glucose change (mg/dL per hour)
 - **ISF**: Insulin Sensitivity Factor (how much 1 unit drops glucose)
-    - Read from your Nightscout profile
-    - Default: 50 mg/dL per unit if not set
+  - Read from your Nightscout profile
+  - Default: 50 mg/dL per unit if not set
 - **Safety Multiplier**: 0.75 (makes recommendations conservative)
 - **Automation Adjustment**: Accounts for extra insulin delivered
 
 **Logic:**
 
 1. **If glucose rising/stable + extra insulin delivered:**
-    - Add full automation adjustment
-    - Basal rate is too low; automation is compensating
+  - Add full automation adjustment
+  - Basal rate is too low; automation is compensating
 
 2. **If glucose falling + extra insulin delivered:**
-    - Add 50% of automation adjustment
-    - Be conservative; fall might be from automation
+  - Add 50% of automation adjustment
+  - Be conservative; fall might be from automation
 
 3. **If no automation detected:**
-    - Use only base adjustment from slope
+  - Use only base adjustment from slope
 
 ### 5. Safety Limits
 
@@ -128,19 +128,19 @@ Fasting periods must pass strict safety checks to be used for recommendations:
 **Disqualification Rules:**
 
 1. **Duration < 4 hours**
-    - Not enough time to assess basal effectiveness
+  - Not enough time to assess basal effectiveness
 
 2. **CV% > 30%**
-    - Too much glucose variability
-    - Indicates other factors affecting glucose
+  - Too much glucose variability
+  - Indicates other factors affecting glucose
 
 3. **Hypoglycemia detected**
-    - Any glucose < 70 mg/dL for > 15 consecutive minutes
-    - Safety concern; period not reliable
+  - Any glucose < 70 mg/dL for > 15 consecutive minutes
+  - Safety concern; period not reliable
 
 4. **Hyperglycemia detected**
-    - Any glucose reading > 250 mg/dL
-    - Indicates other issues (illness, pump failure, etc.)
+  - Any glucose reading > 250 mg/dL
+  - Indicates other issues (illness, pump failure, etc.)
 
 ### 7. Confidence Scoring
 
@@ -253,44 +253,44 @@ The "Basal Rate Optimization Recommendations" section shows:
 **⚠️ CRITICAL SAFETY GUIDELINES:**
 
 1. **Consult Your Healthcare Provider First**
-    - Review recommendations with your doctor or diabetes educator
-    - Get approval before making changes
-    - Discuss your individual circumstances
+  - Review recommendations with your doctor or diabetes educator
+  - Get approval before making changes
+  - Discuss your individual circumstances
 
 2. **Test One Time Period at a Time**
-    - Only adjust one basal rate segment at a time
-    - This allows you to clearly see the effect of each change
-    - Don't change multiple segments simultaneously
+  - Only adjust one basal rate segment at a time
+  - This allows you to clearly see the effect of each change
+  - Don't change multiple segments simultaneously
 
 3. **Wait 2-3 Days Between Adjustments**
-    - Give your body time to adjust
-    - Collect enough data to assess the change
-    - Don't rush the process
+  - Give your body time to adjust
+  - Collect enough data to assess the change
+  - Don't rush the process
 
 4. **Start with High-Confidence Recommendations**
-    - Prioritize green (high confidence) recommendations
-    - These have the strongest supporting data
-    - Be more cautious with yellow or red recommendations
+  - Prioritize green (high confidence) recommendations
+  - These have the strongest supporting data
+  - Be more cautious with yellow or red recommendations
 
 5. **Be Conservative**
-    - Consider making smaller adjustments than recommended
-    - You can always increase more later
-    - It's safer to under-adjust than over-adjust
+  - Consider making smaller adjustments than recommended
+  - You can always increase more later
+  - It's safer to under-adjust than over-adjust
 
 6. **Monitor Closely for Hypoglycemia**
-    - Watch for low blood sugar, especially after rate increases
-    - Have fast-acting carbs readily available
-    - Consider temporary lower targets initially
+  - Watch for low blood sugar, especially after rate increases
+  - Have fast-acting carbs readily available
+  - Consider temporary lower targets initially
 
 7. **Keep Detailed Notes**
-    - Document all changes in your diabetes management app
-    - Note the date, time block, old rate, new rate
-    - Track observed effects over the following days
+  - Document all changes in your diabetes management app
+  - Note the date, time block, old rate, new rate
+  - Track observed effects over the following days
 
 8. **Verify with Basal Testing**
-    - After making changes, do traditional basal testing
-    - Skip meals and monitor glucose for 4-6 hours
-    - Confirm the new rate keeps glucose stable
+  - After making changes, do traditional basal testing
+  - Skip meals and monitor glucose for 4-6 hours
+  - Confirm the new rate keeps glucose stable
 
 ---
 
@@ -521,34 +521,34 @@ The system detects automated insulin delivery from:
 ### What This Tool Does NOT Account For
 
 1. **Exercise and Activity**
-    - Physical activity affects insulin sensitivity
-    - May cause glucose drops unrelated to basal rates
-    - Consider excluding exercise days from analysis
+  - Physical activity affects insulin sensitivity
+  - May cause glucose drops unrelated to basal rates
+  - Consider excluding exercise days from analysis
 
 2. **Illness and Stress**
-    - Increases insulin resistance
-    - Temporary changes, not indicative of basal needs
-    - Exclude sick days from analysis
+  - Increases insulin resistance
+  - Temporary changes, not indicative of basal needs
+  - Exclude sick days from analysis
 
 3. **Hormonal Cycles**
-    - Menstrual cycles affect insulin sensitivity
-    - May need different basal rates at different cycle phases
-    - Consider analyzing by cycle phase
+  - Menstrual cycles affect insulin sensitivity
+  - May need different basal rates at different cycle phases
+  - Consider analyzing by cycle phase
 
 4. **Alcohol Consumption**
-    - Affects glucose metabolism
-    - Can cause delayed hypoglycemia
-    - Exclude periods after alcohol consumption
+  - Affects glucose metabolism
+  - Can cause delayed hypoglycemia
+  - Exclude periods after alcohol consumption
 
 5. **Site Changes and Pump Issues**
-    - New infusion sites may absorb differently
-    - Pump malfunctions affect insulin delivery
-    - Exclude days with site/pump issues
+  - New infusion sites may absorb differently
+  - Pump malfunctions affect insulin delivery
+  - Exclude days with site/pump issues
 
 6. **Medication Changes**
-    - Steroids, beta blockers, etc. affect insulin needs
-    - Temporary adjustments may be needed
-    - Consult healthcare provider
+  - Steroids, beta blockers, etc. affect insulin needs
+  - Temporary adjustments may be needed
+  - Consult healthcare provider
 
 ### When NOT to Use This Tool
 
