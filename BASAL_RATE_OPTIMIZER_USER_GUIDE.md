@@ -13,6 +13,7 @@ The Basal Rate Optimizer is an advanced feature in Nightscout that analyzes your
 ### 1. Fasting Period Detection
 
 The system automatically identifies fasting periods in your data by looking for:
+
 - Time intervals with no carbohydrate intake (at least 2 hours after last meal)
 - Minimal correction boluses
 - Sufficient duration (minimum 4 hours for analysis)
@@ -29,16 +30,19 @@ Fasting periods are ideal for basal rate analysis because:
 For each qualifying fasting period, the system calculates:
 
 **Linear Regression:**
+
 - Fits a line through your glucose readings
 - Calculates the slope (rate of change in mg/dL per hour)
 - Measures R² (how well the line fits the data, 0-1 scale)
 
 **Trend Classification:**
+
 - **Rising**: Slope > +5 mg/dL/hr AND R² > 0.5
 - **Falling**: Slope < -5 mg/dL/hr AND R² > 0.5  
 - **Stable**: |Slope| ≤ 5 mg/dL/hr OR R² ≤ 0.5
 
 **Glucose Variability (CV%):**
+
 - Coefficient of Variation = (Standard Deviation / Mean) × 100
 - Measures glucose stability during the period
 - Lower CV% = more stable glucose = more reliable for basal testing
@@ -60,6 +64,7 @@ Extra Insulin = Actual Insulin - Programmed Insulin
 If your glucose is stable or rising DESPITE receiving extra insulin from automation (temp basals, SMBs), it means your **base basal rate is too low**. The automation is compensating for an inadequate basal rate.
 
 **Example:**
+
 - Overnight period: 8 hours
 - Programmed basal: 1.0 U/hr = 8.0 U total
 - Actual delivery: 10.5 U (temp basals + SMBs)
@@ -105,15 +110,18 @@ Total Adjustment = Base Adjustment + Automation Adjustment
 All calculated adjustments are capped by multiple safety limits:
 
 **Minimum Threshold: 0.05 U/hr**
+
 - Adjustments smaller than this are set to zero
 - Prevents insignificant micro-adjustments
 
 **Percentage Limit: 40% of Current Basal Rate**
+
 - Maximum adjustment is 40% of your current rate
 - Example: 1.0 U/hr basal → max ±0.40 U/hr adjustment
 - Prevents excessive changes relative to current settings
 
 **Absolute Limit: 60% of TDD / 24 hours**
+
 - Based on your Total Daily Dose of insulin
 - Calculated from actual insulin delivery over the analysis period
 - Scales with your individual insulin needs
@@ -147,16 +155,19 @@ Fasting periods must pass strict safety checks to be used for recommendations:
 Each recommendation receives a confidence score (0-100) based on:
 
 **Duration Factor (30 points max):**
+
 - Longer fasting periods = more reliable
 - Score = min(Duration / 6 hours, 1.0) × 30
 - 6+ hour periods get full points
 
 **Stability Factor (30 points max):**
+
 - Lower CV% = more stable = more reliable
 - Score = (1 - CV% / 40) × 30
 - CV% < 20% gets near-full points
 
 **Trend Strength (20 points max):**
+
 - Higher R² = stronger trend = more reliable
 - Score = R² × 20
 - R² > 0.8 gets near-full points
