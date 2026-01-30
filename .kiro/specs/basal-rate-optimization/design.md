@@ -4,12 +4,17 @@
 
 The Basal Rate Optimization feature analyzes glucose trends during fasting periods to provide data-driven recommendations for adjusting basal insulin rates. The system uses statistical analysis (linear regression) to identify whether glucose is rising, falling, or stable during periods when no food is being digested, which indicates whether basal insulin rates are appropriately set.
 
+A key innovation is the accounting for automated insulin delivery from closed-loop systems (Loop, AAPS, OpenAPS). The system analyzes temp basals and Super Micro Boluses (SMBs) to calculate how much extra insulin was delivered beyond the programmed basal rate. If glucose remains stable or rises despite this extra insulin, it indicates the base basal rate is too low and needs to be increased more aggressively.
+
 The design prioritizes safety through:
 
-- Conservative adjustment calculations using safety multipliers
+- Conservative adjustment calculations using a 0.75 safety multiplier
+- Automated insulin delivery accounting to provide accurate recommendations for closed-loop users
+- TDD-based safety limits that scale with individual insulin needs (60% of TDD / 24 hours)
 - Multiple validation checks to disqualify unreliable data
 - Confidence scoring to indicate recommendation reliability
 - Requirement for multiple confirming periods before high-confidence recommendations
+- Support for both mg/dL and mmol/L units with automatic conversion
 - Clear medical disclaimers and warnings
 
 The feature integrates with the existing Nightscout Day to Day report and fasting detection system, reading user profile data for personalized recommendations.
@@ -38,10 +43,19 @@ The feature integrates with the existing Nightscout Day to Day report and fastin
 │  └──────────────────────────────────────────────────────┘  │
 │                                                              │
 │  ┌──────────────────────────────────────────────────────┐  │
+│  │  Insulin Delivery Analysis Engine                     │  │
+│  │  - Calculate programmed basal insulin                 │  │
+│  │  - Analyze temp basals and SMBs                       │  │
+│  │  - Compute extra insulin from automation              │  │
+│  │  - Determine automation adjustment factor             │  │
+│  └──────────────────────────────────────────────────────┘  │
+│                                                              │
+│  ┌──────────────────────────────────────────────────────┐  │
 │  │  Safety Validation Engine                             │  │
 │  │  - Period disqualification checks                     │  │
 │  │  - Hypoglycemia detection                             │  │
-│  │  - Adjustment limit enforcement                       │  │
+│  │  - TDD-based adjustment limit enforcement             │  │
+│  │  - Percentage and minimum threshold limits            │  │
 │  └──────────────────────────────────────────────────────┘  │
 │                                                              │
 │  ┌──────────────────────────────────────────────────────┐  │
