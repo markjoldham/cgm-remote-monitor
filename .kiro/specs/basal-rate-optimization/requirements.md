@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The Basal Rate Optimization feature provides intelligent, safety-focused recommendations for basal insulin rate adjustments based on statistical analysis of fasting period glucose data from Nightscout CGM systems. This feature analyzes glucose trends during periods when no food is being digested (fasting periods) to identify whether basal insulin rates are appropriately set. 
+The Basal Rate Optimization feature provides intelligent, safety-focused recommendations for basal insulin rate adjustments based on statistical analysis of fasting period glucose data from Nightscout CGM systems. This feature analyzes glucose trends during periods when no food is being digested (fasting periods) to identify whether basal insulin rates are appropriately set.
 
 The system uses linear regression and statistical confidence measures to recommend specific rate adjustments while prioritizing user safety through conservative recommendations and multiple validation checks. A key innovation is the accounting for automated insulin delivery (temp basals and SMBs from closed-loop systems), which provides more accurate recommendations by considering the extra insulin that automation systems deliver to compensate for inadequate basal rates.
 
