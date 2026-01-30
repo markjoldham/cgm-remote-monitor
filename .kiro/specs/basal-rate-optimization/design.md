@@ -710,19 +710,19 @@ tests/
 
 *For any* fasting period with glucose readings, calculating linear regression should produce both a slope value and an R² value, where R² is between 0 and 1.
 
-_Validates:_ Requirements 1.1, 1.2
+Validates: Requirements 1.1, 1.2
 
 #### Property 2: Trend Classification Correctness
 
 *For any* calculated slope and R² value, the trend classification should be: 'rising' when slope > 5 and R² > 0.5, 'falling' when slope < -5 and R² > 0.5, and 'stable' otherwise.
 
-_Validates:_ Requirements 1.3, 1.4, 1.5
+Validates: Requirements 1.3, 1.4, 1.5
 
 #### Property 3: CV Calculation
 
 *For any* fasting period with glucose readings, the coefficient of variation (CV%) should be calculated and should be a non-negative number.
 
-_Validates:_ Requirements 1.6
+Validates: Requirements 1.6
 
 ### Time Classification Properties
 
@@ -730,13 +730,13 @@ _Validates:_ Requirements 1.6
 
 *For any* fasting period, the time block classification should be: 'overnight' when start hour is >= 22 or < 6, 'morning' when start hour is >= 6 and < 12, 'afternoon' when start hour is >= 12 and < 18, and 'evening' when start hour is >= 18 and < 22.
 
-_Validates:_ Requirements 2.1, 2.2, 2.3, 2.4
+Validates: Requirements 2.1, 2.2, 2.3, 2.4
 
 #### Property 5: Time Block Grouping
 
 *For any* collection of fasting periods, grouping by time of day should result in each period appearing in exactly one time block group, and the group should match the period's start time classification.
 
-_Validates:_ Requirements 2.5
+Validates: Requirements 2.5
 
 ### Adjustment Calculation Properties
 
@@ -744,31 +744,31 @@ _Validates:_ Requirements 2.5
 
 *For any* slope value, ISF value, and safety multiplier (0.3-0.5), the calculated adjustment should equal (slope / ISF) * safety_multiplier before any limits are applied.
 
-_Validates:_ Requirements 3.1, 3.3
+Validates: Requirements 3.1, 3.3
 
 #### Property 7: ISF Default Fallback
 
 *For any* calculation where ISF is not provided in profile data, the system should use 50 mg/dL per unit as the default ISF value.
 
-_Validates:_ Requirements 3.2
+Validates: Requirements 3.2
 
 #### Property 8: Minimum Adjustment Threshold
 
 *For any* calculated adjustment with absolute value less than 0.025 U/hr, the final recommended adjustment should be 0 (no change).
 
-_Validates:_ Requirements 3.4
+Validates: Requirements 3.4
 
 #### Property 9: New Rate Calculation
 
 *For any* current basal rate and adjustment value, the new recommended rate should equal the current rate plus the adjustment.
 
-_Validates:_ Requirements 3.5
+Validates: Requirements 3.5
 
 #### Property 10: Adjustment Safety Limits
 
 *For any* calculated adjustment and current basal rate, the final adjustment should not exceed 0.15 U/hr in absolute value AND should not exceed 20% of the current basal rate in absolute value.
 
-_Validates:_ Requirements 3.6, 3.7
+Validates: Requirements 3.6, 3.7
 
 ### Confidence Scoring Properties
 
@@ -776,13 +776,13 @@ _Validates:_ Requirements 3.6, 3.7
 
 *For any* set of qualifying periods, the confidence score should be the sum of four components: duration score (max 30), stability score (max 30), trend strength score (max 20), and consistency score (max 20), resulting in a total between 0 and 100.
 
-_Validates:_ Requirements 4.1, 4.2, 4.3, 4.4
+Validates: Requirements 4.1, 4.2, 4.3, 4.4
 
 #### Property 12: Confidence Level Classification
 
 *For any* confidence score, the confidence level should be 'high' when score >= 70, 'medium' when score >= 50 and < 70, and 'low' when score < 50.
 
-_Validates:_ Requirements 4.5, 4.6, 4.7
+Validates: Requirements 4.5, 4.6, 4.7
 
 ### Safety Validation Properties
 
@@ -790,25 +790,25 @@ _Validates:_ Requirements 4.5, 4.6, 4.7
 
 *For any* fasting period, it should be disqualified if: duration < 4 hours, OR CV% > 30, OR contains glucose < 70 mg/dL for > 15 consecutive minutes, OR contains any glucose > 250 mg/dL.
 
-_Validates:_ Requirements 5.1, 5.2, 5.3, 5.4
+Validates: Requirements 5.1, 5.2, 5.3, 5.4
 
 #### Property 14: Disqualification Reason Recording
 
 *For any* disqualified fasting period, the disqualification result should include a non-empty reason string explaining why it was disqualified.
 
-_Validates:_ Requirements 5.5
+Validates: Requirements 5.5
 
 #### Property 15: High Confidence Confirmation Requirement
 
 *For any* recommendation with confidence score >= 70, there should be at least 2 qualifying periods with the same trend direction (same sign of slope) from different calendar days.
 
-_Validates:_ Requirements 6.1, 6.2, 6.3
+Validates: Requirements 6.1, 6.2, 6.3
 
 #### Property 16: Confidence Capping for Insufficient Periods
 
 *For any* time block with fewer than 2 qualifying periods, the maximum confidence score should be capped at 69.
 
-_Validates:_ Requirements 6.4
+Validates: Requirements 6.4
 
 ### Recommendation Generation Properties
 
@@ -816,13 +816,13 @@ _Validates:_ Requirements 6.4
 
 *For any* generated recommendation for a time block, it should include all required fields: current basal rate, adjustment magnitude and direction, new basal rate value, confidence score, explanatory reasoning, and supporting data.
 
-_Validates:_ Requirements 7.1, 7.2, 7.3, 7.4, 7.5, 7.6
+Validates: Requirements 7.1, 7.2, 7.3, 7.4, 7.5, 7.6
 
 #### Property 18: Insufficient Data Handling
 
 *For any* time block with insufficient qualifying data (< 2 periods or all disqualified), the recommendation should be "NO CHANGE" with an explanation of why more data is needed.
 
-_Validates:_ Requirements 7.7
+Validates: Requirements 7.7
 
 ### UI Integration Properties
 
@@ -830,31 +830,31 @@ _Validates:_ Requirements 7.7
 
 *For any* generated recommendations display, the output should contain the medical disclaimer text stating recommendations are not medical advice.
 
-_Validates:_ Requirements 8.2
+Validates: Requirements 8.2
 
 #### Property 20: Confidence Color Coding
 
 *For any* recommendation display, the color coding should be green when confidence >= 70, yellow when confidence >= 50 and < 70, and red when confidence < 50.
 
-_Validates:_ Requirements 8.3
+Validates: Requirements 8.3
 
 #### Property 21: Metadata Display
 
 *For any* recommendations display, it should show the total number of fasting periods analyzed and the date range of the analysis.
 
-_Validates:_ Requirements 8.4
+Validates: Requirements 8.4
 
 #### Property 22: Supporting Data Formatting
 
 *For any* recommendation with supporting data, each qualifying period should be formatted to show date, slope, duration, and CV%.
 
-_Validates:_ Requirements 8.5
+Validates: Requirements 8.5
 
 #### Property 23: Safety Tips Inclusion
 
 *For any* recommendations display, it should include practical tips for implementing basal rate changes safely.
 
-_Validates:_ Requirements 8.6
+Validates: Requirements 8.6
 
 ### Export Properties
 
@@ -862,13 +862,13 @@ _Validates:_ Requirements 8.6
 
 *For any* exported recommendations (PDF or CSV), the export should include the medical disclaimer text.
 
-_Validates:_ Requirements 9.3
+Validates: Requirements 9.3
 
 #### Property 25: Export Metadata Inclusion
 
 *For any* exported recommendations, the export should include the analysis date range and total number of periods analyzed.
 
-_Validates:_ Requirements 9.4
+Validates: Requirements 9.4
 
 ### Profile Integration Properties
 
@@ -876,19 +876,19 @@ _Validates:_ Requirements 9.4
 
 *For any* analysis with available profile data, the system should read and use the basal rate schedule and ISF value from the profile.
 
-_Validates:_ Requirements 10.1, 10.2
+Validates: Requirements 10.1, 10.2
 
 #### Property 27: Profile Data Fallback with Warning
 
 *For any* analysis with unavailable or incomplete profile data, the system should use default values AND display a warning to the user about using defaults.
 
-_Validates:_ Requirements 10.3
+Validates: Requirements 10.3
 
 #### Property 28: Basal Rate Segment Selection
 
 *For any* fasting period in a time block with multiple basal rate segments, the system should use the basal rate that is active at the start time of the fasting period.
 
-_Validates:_ Requirements 10.4
+Validates: Requirements 10.4
 
 ### Error Handling Properties
 
@@ -896,28 +896,28 @@ _Validates:_ Requirements 10.4
 
 *For any* fasting period with glucose trending toward 70 mg/dL (within 10 mg/dL), the recommendation should include a warning to monitor closely after any rate increase.
 
-_Validates:_ Requirements 11.1
+Validates: Requirements 11.1
 
 #### Property 30: Insufficient Data Messaging
 
 *For any* time block with insufficient data for a recommendation, the display should include a message indicating more data is needed.
 
-_Validates:_ Requirements 11.2
+Validates: Requirements 11.2
 
 #### Property 31: Missing Profile Warning
 
 *For any* analysis where profile data is missing or incomplete, the display should include a warning that default values are being used.
 
-_Validates:_ Requirements 11.3
+Validates: Requirements 11.3
 
 #### Property 32: Calculation Error Handling
 
 *For any* calculation that encounters an error (division by zero, invalid input), the system should log the error and display a user-friendly message indicating the recommendation could not be generated.
 
-_Validates:_ Requirements 11.4
+Validates: Requirements 11.4
 
 #### Property 33: Implementation Safety Warning
 
 *For any* displayed recommendation, it should include a warning to test one time period at a time and wait 2-3 days between adjustments.
 
-_Validates:_ Requirements 11.5
+Validates: Requirements 11.5
