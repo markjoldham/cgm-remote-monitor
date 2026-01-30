@@ -98,11 +98,11 @@ The feature integrates with the existing Nightscout Day to Day report and fastin
 
 ### 1. Statistical Analysis Engine
 
-#### Purpose
+#### Purpose: Statistical Analysis
 
 Calculate glucose trends and variability metrics for fasting periods.
 
-#### Key Functions
+#### Key Functions: Statistical Analysis
 
 ```javascript
 /**
@@ -170,11 +170,11 @@ CV% = (standard_deviation / mean) * 100
 
 ### 2. Safety Validation Engine
 
-#### Purpose
+#### Purpose: Safety Validation
 
 Ensure only reliable and safe data is used for recommendations.
 
-#### Key Functions
+#### Key Functions: Safety Validation
 
 ```javascript
 /**
@@ -258,11 +258,11 @@ function applyAdjustmentLimits(calculatedAdjustment, currentBasalRate) {
 
 ### 3. Recommendation Engine
 
-#### Purpose
+#### Purpose: Recommendation Engine
 
 Calculate basal rate adjustments and confidence scores.
 
-#### Key Functions
+#### Key Functions: Recommendation Engine
 
 ```javascript
 /**
@@ -379,11 +379,11 @@ function groupByTimeOfDay(fastingPeriods) {
 
 ### 4. UI Formatter
 
-#### Purpose
+#### Purpose: UI Formatting
 
 Generate HTML display and export functionality for recommendations.
 
-#### Key Functions
+#### Key Functions: UI Formatting
 
 ```javascript
 /**
