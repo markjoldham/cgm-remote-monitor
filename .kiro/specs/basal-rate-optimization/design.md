@@ -138,10 +138,10 @@ Given n data points (x₁, y₁), (x₂, y₂), ..., (xₙ, yₙ) where:
 Calculate:
   x̄ = mean of x values
   ȳ = mean of y values
-  
+
   slope = Σ((xᵢ - x̄)(yᵢ - ȳ)) / Σ((xᵢ - x̄)²)
   intercept = ȳ - slope * x̄
-  
+
   R² = 1 - (SS_res / SS_tot)
   where:
     SS_res = Σ(yᵢ - ŷᵢ)²  (residual sum of squares)
@@ -205,23 +205,23 @@ function validateFastingPeriod(fastingPeriod, analysis) {
   if (fastingPeriod.duration < 4) {
     return {qualified: false, reason: 'Duration too short (< 4 hours)'};
   }
-  
+
   // Rule 2: Maximum variability
   if (analysis.cv > 30) {
     return {qualified: false, reason: 'Too variable (CV > 30%)'};
   }
-  
+
   // Rule 3: Hypoglycemia check
   if (detectHypoglycemia(fastingPeriod.glucoseReadings)) {
     return {qualified: false, reason: 'Contains hypoglycemia'};
   }
-  
+
   // Rule 4: Hyperglycemia check
   const maxGlucose = Math.max(...fastingPeriod.glucoseReadings.map(r => r.sgv));
   if (maxGlucose > 250) {
     return {qualified: false, reason: 'Contains hyperglycemia (> 250 mg/dL)'};
   }
-  
+
   return {qualified: true, reason: null};
 }
 ```
@@ -231,23 +231,23 @@ function validateFastingPeriod(fastingPeriod, analysis) {
 ```javascript
 function applyAdjustmentLimits(calculatedAdjustment, currentBasalRate) {
   let limitedAdjustment = calculatedAdjustment;
-  
+
   // Absolute limit: ±0.15 U/hr
   if (Math.abs(limitedAdjustment) > 0.15) {
     limitedAdjustment = Math.sign(limitedAdjustment) * 0.15;
   }
-  
+
   // Percentage limit: ±20% of current rate
   const maxPercentageChange = currentBasalRate * 0.20;
   if (Math.abs(limitedAdjustment) > maxPercentageChange) {
     limitedAdjustment = Math.sign(limitedAdjustment) * maxPercentageChange;
   }
-  
+
   // Minimum threshold: 0.025 U/hr
   if (Math.abs(limitedAdjustment) < 0.025) {
     limitedAdjustment = 0;
   }
-  
+
   return limitedAdjustment;
 }
 ```
@@ -298,16 +298,16 @@ function generateRecommendation(timeBlock, periods, profileData)
 ```javascript
 function calculateAdjustment(slope, isf, currentBasalRate) {
   const SAFETY_MULTIPLIER = 0.4; // Conservative factor
-  
+
   // Base calculation
   let adjustment = (slope / isf) * SAFETY_MULTIPLIER;
-  
+
   // Apply safety limits
   adjustment = applyAdjustmentLimits(adjustment, currentBasalRate);
-  
+
   // Round to nearest 0.05 U/hr (typical pump increment)
   adjustment = Math.round(adjustment / 0.05) * 0.05;
-  
+
   return adjustment;
 }
 ```
@@ -317,27 +317,27 @@ function calculateAdjustment(slope, isf, currentBasalRate) {
 ```javascript
 function calculateConfidenceScore(qualifyingPeriods, analysis) {
   let score = 0;
-  
+
   // Duration component (max 30 points)
   const avgDuration = qualifyingPeriods.reduce((sum, p) => sum + p.duration, 0) / qualifyingPeriods.length;
   const durationScore = Math.min(avgDuration / 6, 1.0) * 30;
   score += durationScore;
-  
+
   // Stability component (max 30 points)
   const avgCV = qualifyingPeriods.reduce((sum, p) => sum + p.cv, 0) / qualifyingPeriods.length;
   const stabilityScore = Math.max(0, (1 - avgCV / 40)) * 30;
   score += stabilityScore;
-  
+
   // Trend strength component (max 20 points)
   const avgRSquared = qualifyingPeriods.reduce((sum, p) => sum + p.rSquared, 0) / qualifyingPeriods.length;
   const trendScore = avgRSquared * 20;
   score += trendScore;
-  
+
   // Consistency component (max 20 points)
   const totalPeriods = analysis.totalPeriodsInTimeBlock;
   const consistencyScore = (qualifyingPeriods.length / totalPeriods) * 20;
   score += consistencyScore;
-  
+
   return Math.round(score);
 }
 ```
@@ -352,10 +352,10 @@ function groupByTimeOfDay(fastingPeriods) {
     afternoon: [],  // 12:00 - 18:00
     evening: []     // 18:00 - 22:00
   };
-  
+
   fastingPeriods.forEach(period => {
     const startHour = moment(period.startTime).hour();
-    
+
     if (startHour >= 22 || startHour < 6) {
       groups.overnight.push(period);
     } else if (startHour >= 6 && startHour < 12) {
@@ -366,7 +366,7 @@ function groupByTimeOfDay(fastingPeriods) {
       groups.evening.push(period);
     }
   });
-  
+
   return groups;
 }
 ```
@@ -415,21 +415,21 @@ function generateRecommendationsHTML(recommendations, metadata) {
   let html = `
     <div class="basal-rate-recommendations">
       <h3>Basal Rate Optimization Recommendations</h3>
-      
+
       <div class="disclaimer">
-        ⚠️ IMPORTANT: These are data-driven suggestions, not medical advice. 
+        ⚠️ IMPORTANT: These are data-driven suggestions, not medical advice.
         Discuss with your healthcare provider before making changes.
       </div>
-      
+
       <div class="analysis-summary">
-        📊 Analysis based on ${metadata.periodCount} fasting periods 
+        📊 Analysis based on ${metadata.periodCount} fasting periods
         from ${metadata.startDate} to ${metadata.endDate}
       </div>
-      
-      ${Object.keys(recommendations).map(timeBlock => 
+
+      ${Object.keys(recommendations).map(timeBlock =>
         generateTimeBlockHTML(timeBlock, recommendations[timeBlock])
       ).join('')}
-      
+
       <div class="tips">
         💡 Tips:
         <ul>
@@ -439,14 +439,14 @@ function generateRecommendationsHTML(recommendations, metadata) {
           <li>Keep detailed notes of changes made</li>
         </ul>
       </div>
-      
+
       <div class="export-buttons">
         <button onclick="exportRecommendationsToPDF()">Export to PDF</button>
         <button onclick="exportRecommendationsToCSV()">Export to CSV</button>
       </div>
     </div>
   `;
-  
+
   return html;
 }
 ```
@@ -578,7 +578,7 @@ function generateRecommendation(timeBlock, periods, profileData) {
         recommendation: 'NO CHANGE - Need more data'
       };
     }
-    
+
     // Analyze each period
     const analyses = periods.map(period => {
       try {
@@ -588,7 +588,7 @@ function generateRecommendation(timeBlock, periods, profileData) {
         return null;
       }
     }).filter(a => a !== null);
-    
+
     if (analyses.length === 0) {
       return {
         timeBlock,
@@ -597,10 +597,10 @@ function generateRecommendation(timeBlock, periods, profileData) {
         recommendation: 'NO CHANGE - Analysis error'
       };
     }
-    
+
     // Filter qualifying periods
     const qualifyingPeriods = analyses.filter(a => a.qualified);
-    
+
     if (qualifyingPeriods.length < 2) {
       return {
         timeBlock,
@@ -610,25 +610,25 @@ function generateRecommendation(timeBlock, periods, profileData) {
         confidenceScore: Math.min(qualifyingPeriods.length * 30, 49)
       };
     }
-    
+
     // Calculate recommendation
     const adjustment = calculateAdjustment(
       avgSlope(qualifyingPeriods),
       profileData.isf || 50,
       getCurrentBasalRate(timeBlock, profileData)
     );
-    
+
     const confidence = calculateConfidenceScore(qualifyingPeriods, {
       totalPeriodsInTimeBlock: periods.length
     });
-    
+
     return {
       timeBlock,
       adjustment,
       confidenceScore: confidence,
       // ... rest of recommendation data
     };
-    
+
   } catch (error) {
     console.error('Recommendation generation failed:', error);
     return {
