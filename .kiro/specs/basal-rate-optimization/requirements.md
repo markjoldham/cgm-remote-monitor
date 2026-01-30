@@ -2,9 +2,13 @@
 
 ## Introduction
 
-The Basal Rate Optimization feature provides intelligent, safety-focused recommendations for basal insulin rate adjustments based on statistical analysis of fasting period glucose data from Nightscout CGM systems. This feature analyzes glucose trends during periods when no food is being digested (fasting periods) to identify whether basal insulin rates are appropriately set. The system uses linear regression and statistical confidence measures to recommend specific rate adjustments while prioritizing user safety through conservative recommendations and multiple validation checks.
+The Basal Rate Optimization feature provides intelligent, safety-focused recommendations for basal insulin rate adjustments based on statistical analysis of fasting period glucose data from Nightscout CGM systems. This feature analyzes glucose trends during periods when no food is being digested (fasting periods) to identify whether basal insulin rates are appropriately set. 
 
-Target users are people with Type 1 diabetes using insulin pumps who want data-driven insights to optimize their basal insulin therapy in consultation with their healthcare providers.
+The system uses linear regression and statistical confidence measures to recommend specific rate adjustments while prioritizing user safety through conservative recommendations and multiple validation checks. A key innovation is the accounting for automated insulin delivery (temp basals and SMBs from closed-loop systems), which provides more accurate recommendations by considering the extra insulin that automation systems deliver to compensate for inadequate basal rates.
+
+Safety limits are dynamically scaled based on the user's Total Daily Dose (TDD) of insulin, ensuring recommendations are appropriate for individual insulin needs. The system supports both mg/dL and mmol/L units with automatic conversion of all glucose values and slopes.
+
+Target users are people with Type 1 diabetes using insulin pumps (including closed-loop systems like Loop, AAPS, and OpenAPS) who want data-driven insights to optimize their basal insulin therapy in consultation with their healthcare providers.
 
 ## Glossary
 
@@ -22,7 +26,11 @@ Target users are people with Type 1 diabetes using insulin pumps who want data-d
 - **CV_Percent**: Coefficient of Variation - measure of glucose variability expressed as percentage
 - **Hypoglycemia**: Blood glucose below 70 mg/dL
 - **Hyperglycemia**: Blood glucose above 250 mg/dL
-- **Safety_Multiplier**: Conservative factor (0.3 to 0.5) applied to calculated adjustments to ensure recommendations are cautious
+- **Safety_Multiplier**: Conservative factor (0.75) applied to calculated adjustments to ensure recommendations are cautious
+- **TDD**: Total Daily Dose - the total amount of insulin delivered in a 24-hour period (units per day)
+- **Temp_Basal**: Temporary basal rate adjustment made by automated insulin delivery systems
+- **SMB**: Super Micro Bolus - small automated insulin doses delivered by advanced closed-loop systems
+- **Automation_Adjustment**: Additional insulin adjustment calculated from extra insulin delivered by automation beyond programmed basal
 
 ## Requirements
 
@@ -53,17 +61,21 @@ Target users are people with Type 1 diabetes using insulin pumps who want data-d
 
 ### Requirement 3: Basal Rate Adjustment Calculation
 
-**User Story:** As a person with diabetes, I want specific basal rate adjustment recommendations with clear magnitudes, so that I know exactly how much to change my pump settings.
+**User Story:** As a person with diabetes, I want specific basal rate adjustment recommendations that account for automated insulin delivery, so that I know exactly how much to change my pump settings based on my actual insulin needs.
 
 #### Acceptance Criteria for Requirement 3
 
-1. WHEN calculating a basal rate adjustment, THE Basal_Rate_Optimizer SHALL use the formula: adjustment = (Slope / ISF) * Safety_Multiplier
+1. WHEN calculating a basal rate adjustment, THE Basal_Rate_Optimizer SHALL use the formula: base_adjustment = (Slope / ISF) * Safety_Multiplier
 2. WHEN ISF is not available in Profile_Data, THE Basal_Rate_Optimizer SHALL use a default value of 50 mg/dL per unit
-3. WHEN calculating adjustments, THE Basal_Rate_Optimizer SHALL use a Safety_Multiplier between 0.3 and 0.5
-4. WHEN the calculated adjustment is less than 0.025 units per hour, THE Basal_Rate_Optimizer SHALL recommend no change
-5. WHEN Profile_Data contains current Basal_Rate for the Time_Block, THE Basal_Rate_Optimizer SHALL calculate the new recommended rate by adding the adjustment to the current rate
-6. WHEN the calculated adjustment magnitude exceeds 0.15 units per hour, THE Basal_Rate_Optimizer SHALL limit the adjustment to 0.15 units per hour
-7. WHEN the calculated adjustment exceeds 20 percent of the current Basal_Rate, THE Basal_Rate_Optimizer SHALL limit the adjustment to 20 percent of the current Basal_Rate
+3. WHEN calculating adjustments, THE Basal_Rate_Optimizer SHALL use a Safety_Multiplier of 0.75
+4. WHEN a Fasting_Period contains automated insulin delivery (temp basals, SMBs), THE Basal_Rate_Optimizer SHALL calculate the extra insulin delivered beyond programmed basal
+5. WHEN glucose is stable or rising AND extra insulin was delivered, THE Basal_Rate_Optimizer SHALL add the full automation adjustment to the base adjustment
+6. WHEN glucose is falling AND extra insulin was delivered, THE Basal_Rate_Optimizer SHALL add 50% of the automation adjustment to be conservative
+7. WHEN the calculated adjustment is less than 0.05 units per hour, THE Basal_Rate_Optimizer SHALL recommend no change
+8. WHEN Profile_Data contains current Basal_Rate for the Time_Block, THE Basal_Rate_Optimizer SHALL calculate the new recommended rate by adding the adjustment to the current rate
+9. WHEN the calculated adjustment magnitude exceeds 60% of TDD divided by 24 hours, THE Basal_Rate_Optimizer SHALL limit the adjustment to that value
+10. WHEN the calculated adjustment exceeds 40 percent of the current Basal_Rate, THE Basal_Rate_Optimizer SHALL limit the adjustment to 40 percent of the current Basal_Rate
+11. WHEN multiple safety limits apply, THE Basal_Rate_Optimizer SHALL use the most restrictive limit
 
 ### Requirement 4: Confidence Score Calculation
 
@@ -162,3 +174,31 @@ Target users are people with Type 1 diabetes using insulin pumps who want data-d
 3. WHEN Profile_Data is missing or incomplete, THE Basal_Rate_Optimizer SHALL display a warning that default values are being used
 4. WHEN calculation errors occur, THE Basal_Rate_Optimizer SHALL log the error and display a user-friendly message indicating the recommendation could not be generated
 5. WHEN displaying any recommendation, THE Basal_Rate_Optimizer SHALL include a warning to test one time period at a time and wait 2-3 days between adjustments
+
+### Requirement 12: Unit Conversion and Display
+
+**User Story:** As a person with diabetes using mmol/L units, I want all glucose values and slopes to be displayed in my preferred units, so that I can understand the recommendations without manual conversion.
+
+#### Acceptance Criteria for Requirement 12
+
+1. WHEN the user's Nightscout settings use mmol/L units, THE Basal_Rate_Optimizer SHALL convert all glucose values from mg/dL to mmol/L by dividing by 18
+2. WHEN the user's Nightscout settings use mmol/L units, THE Basal_Rate_Optimizer SHALL convert all glucose slopes from mg/dL/hr to mmol/L/hr by dividing by 18
+3. WHEN displaying glucose values, THE Basal_Rate_Optimizer SHALL show the appropriate unit label (mg/dL or mmol/L)
+4. WHEN displaying glucose slopes, THE Basal_Rate_Optimizer SHALL show the appropriate unit label (mg/dL/hr or mmol/L/hr)
+5. WHEN displaying target ranges in fasting periods, THE Basal_Rate_Optimizer SHALL convert and label the range values according to user's unit preference
+6. WHEN exporting to CSV, THE Basal_Rate_Optimizer SHALL use the user's preferred units for all glucose values and slopes
+7. WHEN exporting to PDF, THE Basal_Rate_Optimizer SHALL use the user's preferred units for all glucose values and slopes
+8. WHEN displaying fasting period statistics (mean, min, max, range), THE Basal_Rate_Optimizer SHALL convert all values to the user's preferred units
+9. WHEN displaying tooltips for fasting periods, THE Basal_Rate_Optimizer SHALL show all glucose values in the user's preferred units
+
+### Requirement 13: TDD-Based Safety Limits
+
+**User Story:** As a person with diabetes, I want safety limits that scale with my individual insulin needs, so that recommendations are appropriate for my total daily insulin usage.
+
+#### Acceptance Criteria for Requirement 13
+
+1. WHEN calculating safety limits, THE Basal_Rate_Optimizer SHALL use the user's actual Total Daily Dose (TDD) from insulin delivery data
+2. WHEN TDD data is available, THE Basal_Rate_Optimizer SHALL calculate the absolute limit as 60% of TDD divided by 24 hours
+3. WHEN TDD data is not available, THE Basal_Rate_Optimizer SHALL estimate TDD from the basal schedule and display a warning
+4. WHEN displaying recommendations, THE Basal_Rate_Optimizer SHALL show which safety limit was applied (absolute, percentage, or minimum threshold)
+5. WHEN TDD is passed from the Day to Day report, THE Basal_Rate_Optimizer SHALL use the average TDD calculated from the analysis period
