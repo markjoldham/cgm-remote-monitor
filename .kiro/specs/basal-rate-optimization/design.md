@@ -681,6 +681,7 @@ Unit tests will focus on:
 Property-based tests will verify universal properties across randomized inputs using a JavaScript property testing library (fast-check). Each test will run a minimum of 100 iterations to ensure comprehensive coverage.
 
 #### Property Test Configuration
+
 - Library: fast-check (JavaScript property-based testing)
 - Minimum iterations: 100 per property
 - Each test tagged with: `Feature: basal-rate-optimization, Property {N}: {description}`
